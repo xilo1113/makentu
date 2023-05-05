@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body{
+            margin:5rem;
+            background: linear-gradient(
+                0deg,#dae90d 0%, #e2a407 100%
+            ) ;
+            height: 95vh; 
+            padding: 1em;
+        }
+        .container{
+            display:flex;
+            justify-content: space-between;
+        }
+        .half{
+            display:flex;
+            justify-content: space-between;
+        }
+        .empty{
+            flex: 1;
+            margin: 0 30px;
+        }
+        .range-slider{
+            max-width: 30em;
+            margin: 8em auto;
+            position: relative;
+            display:flex;
+            
+
+        }
+
+        .middle {
+            display: flex;
+            /* 水平置中 */
+            justify-content: center;    
+            /* 垂直置中 */
+            align-items: center;        
+            }
+        .range-slider .slider{
+            -webkit-appearance: none;
+            width:10rem;
+            height: 1.4em;
+            outline:none;
+            border-radius: 3px;
+            background: #e8e6e1;
+            box-shadow: 
+                3px 3px 6ppx #000
+                insert 1px 1px 1px #909090;
+        }
+
+        .range-slider .slider::-webkit-slider-thumb{
+            -webkit-appearance: none;
+            width:1.7em;
+            height: 1.7em;
+            cursor: pointer;
+            z-index:3;
+            position:relative;
+        }
+
+        .range-slider .slider-thumb{
+            position: absolute;
+            width:1.7em;
+            height: 1.7em;
+            background:#909090;
+            border-radius: 50%;
+            top:50%;
+            left:50%;
+            transform: translate(-50%,-50%);
+            z-index:2;
+            box-shadow: inset 0px 1px 2px #909090
+        }
+
+        .range-slider .slider-thumb::before{
+            content: '';
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform: translate(-50%,-50%);
+            width:0.7em;
+            height: 0.7em;
+            background: #333;
+            border-radius: inherit;
+            transition: 0.3s;
+        }
+
+        .range-slider:hover .slider-thumb::before{
+            background: #2ae0c0;
+
+        }
+        .range-slider .tooltip{
+            position: absolute;
+            width:2.8em;
+            height: 2em;
+            top:-6em;
+            left:52%;
+            transform: translate(-50%,-50%);
+            background: #333;
+            text-align: center;
+            line-height: 35px;
+            color: #fff;
+            border-radius: 3px;
+            box-shadow: 
+                3px 3px 6ppx #000,
+                insert 0px 1px 2px #909090;
+        }
+        .range-slider .tooltip::before{
+            content:'';
+            position: absolute;
+            width:0;
+            height: 0;
+            border-left:  6px solid transparent;
+            border-right:  6px solid transparent;
+            border-top:  10px solid #909090;
+            bottom: -0.5em;
+            left: 50%;
+            transform: translate(-50%);
+        }
+
+        .range-slider .progress2{
+            width: 50%;
+            height: 1.4em;
+            border-radius: 3px;
+            background: linear-gradient(
+                90deg, #335bf4 0%, #2ae9c9 100%
+            ) ; 
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left:0;
+            pointer-events: none;
+        }
+        .range-slider .progresst{
+            width: 50%;
+            height: 1.4em;
+            border-radius: 3px;
+            background: linear-gradient(
+                90deg, #335bf4 0%, #b4ac0d 100%
+            ) ; 
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left:0;
+            pointer-events: none;
+        }
+        @media  screen and (max-width: 700px) {
+            .neu-range-slider{
+                width:100%;
+            }
+        }
+
+        .vertical{
+            transform: rotate(-90deg) ;
+        }
+
+        .toggle__input{
+            visibility: hidden;
+            pointer-events: none;
+            }
+
+            .toggle__label{
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            border: 2px solid lightgrey;
+            border-radius: 30px;
+            background: #ffe4e4;
+            cursor: pointer;
+            
+            position: relative;
+            }
+
+            .toggle__label::before{
+                content:'off';
+                display: inline-block;
+                width: 30px;
+                height: 30px;
+                background: #af4154;
+                border-radius: 50%;
+                color: #fff;
+                line-height: 30px;
+                text-align: center;
+                font-size: 15px;
+                position: absolute;
+                left: 0;
+                top: 0;
+                transform: rotate(0);
+                
+                transition: 1s;
+                }
+                .toggle__input:checked + .toggle__label{
+                    background: #bedce3;
+                    }
+
+                    .toggle__input:checked + .toggle__label::before{
+                    content:'on';
+                    background: #0b7fab;
+                    left: 30px;
+                    transform: rotate(360deg);
+                    }
+    </style>
+</head>
+<body>
+    <h1 class="middle">LIGHT CONTROL</h1>
+    <div class ="container ">
+        <div class = "half">
+            <div class = "range-slider ">
+                <div class="tooltip "></div>
+                
+                <div class = "vertical">
+                    <input type="range" min="0" max="100" value="50" class="slider" height="10rem" onchange="sendSliderData('1', this.value)">
+                    <div class="slider-thumb"></div>
+                    <div class="progress2"></div>
+                </div>
+                
+            </div>
+            <div class = "range-slider ">
+                <div class="tooltip "></div>
+                
+                <div class = "vertical">
+                    <input type="range" min="0" max="100" value="50" class="slider"onchange="sendSliderData('2', this.value)">
+                    <div class="slider-thumb"></div>
+                    <div class="progress2"></div>
+                </div>
+                
+            </div>
+   
+        </div>
+        <div class="empty"></div>
+        <div class = "half">
+            <div class = "range-slider ">
+                <div class="tooltip "></div>
+                
+                <div class = "vertical">
+                    <input type="range" min="0" max="100" value="50" class="slider"onchange="sendSliderData('3', this.value)">
+                    <div class="slider-thumb"></div>
+                    <div class="progress2"></div>
+                </div>
+                
+            </div>
+            <div class = "range-slider ">
+                <div class="tooltip "></div>
+                
+                <div class = "vertical">
+                    <input type="range" min="0" max="100" value="50" class="slider"onchange="sendSliderData('4', this.value)">
+                    <div class="slider-thumb"></div>
+                    <div class="progress2"></div>
+                </div>
+                
+            </div>
+   
+        </div>
+        <div class="empty"></div>
+        <div class = "half">
+            <div class = "range-slider ">
+                <div class="tooltip "></div>
+                
+                <div class = "vertical">
+                    <input type="range" min="0" max="100" value="50" class="slider"onchange="sendSliderData('5', this.value)">
+                    <div class="slider-thumb"></div>
+                    <div class="progress2"></div>
+                </div>
+                
+            </div>
+            <div class = "range-slider ">
+                <div class="tooltip "></div>
+                
+                <div class = "vertical">
+                    <input type="range" min="0" max="100" value="50" class="slider"onchange="sendSliderData('6', this.value)">
+                    <div class="slider-thumb"></div>
+                    <div class="progress2"></div>
+                </div>
+                
+            </div>
+   
+        </div>
+        <div class="empty"></div>
+        <div class = "half">
+            <div class = "range-slider ">
+                <div class="tooltip "></div>
+                
+                <div class = "vertical">
+                    <input type="range" min="0" max="100" value="50" class="slider"onchange="sendSliderData('7', this.value)">
+                    <div class="slider-thumb"></div>
+                    <div class="progress2"></div>
+                </div>
+                
+            </div>
+            <div class = "range-slider ">
+                <div class="tooltip "></div>
+                
+                <div class = "vertical">
+                    <input type="range" min="0" max="100" value="50" class="slider"onchange="sendSliderData('8', this.value)">
+                    <div class="slider-thumb"></div>
+                    <div class="progress2"></div>
+                </div>
+                
+            </div>
+   
+        </div>
+        
+        
+    </div>
+    <div class="middle">
+        <input id="toggle" class="toggle__input" type="checkbox"></input>
+        <label for="toggle" class="toggle__label"></label>
+    </div>
+    <script>
+        const container = document.querySelectorAll(".range-slider");
+
+        for(let i=0;i<container.length;i++){
+            const slider = container[i].querySelector(".slider");
+            const thumb = container[i].querySelector(".slider-thumb");
+            const tooltip = container[i].querySelector(".tooltip");
+            //const progress1 = container[i].querySelector(".progress1");
+            const progress2 = container[i].querySelector(".progress2");
+
+            function customSlider(){
+                const maxval = slider.getAttribute("max");
+                const val = (slider.value/maxval)*100 +"%";
+                const opt =((slider.value/maxval)*50+50)+"%";
+
+                tooltip.innerHTML = slider.value;
+                tooltip.style.opacity = opt;
+                //progress1.style.width = val;
+                progress2.style.width = val;
+                thumb.style.left = val;
+            }
+
+            customSlider();
+
+            slider.addEventListener("input",()=>{
+                customSlider();
+            })
+        }
+        function sendSliderData(sliderId, sliderValue) {
+        $.get("/blub", {id:sliderId, power: sliderValue }, function(data) {
+          console.log("Data sent successfully!");
+        });
+        }   
+
+        
+    </script>
+</body>
+</html>
